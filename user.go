@@ -112,7 +112,14 @@ func updateDataDB(user *User, nutr *Nutrient) error {
 	defer session.Close()
 
 	selector := bson.M{"name": user.Name}
-	change := bson.M{"data.calories": nutr.Calories, "data.fat": nutr.Fat, "data.cholesterol": nutr.Cholesterol, "data.sodium": nutr.Sodium, "data.carbohydrates": nutr.Carbohydrates, "data.protein": nutr.Protein}
+	change := bson.M{
+		"data.calories": nutr.Calories,
+		"data.fat": nutr.Fat,
+		"data.cholesterol": nutr.Cholesterol,
+		"data.sodium": nutr.Sodium,
+		"data.carbohydrates": nutr.Carbohydrates,
+		"data.protein": nutr.Protein,
+	}
 	update := bson.M{"$inc": &change}
 
 	return collection.Update(selector, update)

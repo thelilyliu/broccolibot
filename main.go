@@ -3,12 +3,16 @@ package main
 import (
 	"encoding/json"
 	"html/template"
+	"image"
+	"image/jpeg"
 	"log"
 	"net/http"
+	"os"
 	"path"
 	"strings"
 	"time"
 
+	"github.com/disintegration/imaging"
 	"github.com/husobee/vestigo"
 )
 
@@ -22,9 +26,9 @@ type Error struct {
 }
 
 const (
-	errorStatusCode = 555
-	serverName      = "GWS"
-	userName        = "User"
+	errorCode  = 555
+	serverName = "GWS"
+	userName   = "User"
 )
 
 func main() {
@@ -46,6 +50,7 @@ func main() {
 		fileServerAssets.ServeHTTP(w, r)
 	})
 
+	router.Post("/postImage", postImage)
 	router.Post("/updateData", updateData)
 	router.Get("/getUser", getUser)
 	router.Get("/", viewIndex)
@@ -77,50 +82,92 @@ func viewIndex(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles(layout, content)
 	if err != nil {
 		returnCode = 1
-		log.Println("view index err 1:", err)
+		log.Println("view index 1:", err)
 	}
 
 	if returnCode == 0 {
 		if err := t.ExecuteTemplate(w, "my-template", page); err != nil {
 			returnCode = 2
-			log.Println("view index err 2:", err)
+			log.Println("view index 2:", err)
 		}
 	}
 
 	// error handling
 	if returnCode != 0 {
-		handleError(returnCode, errorStatusCode, "Index page could not be viewed.", w)
+		handleError(returnCode, errorCode, "Error: view index", w)
 	}
 }
 
 /*
   ========================================
-  Get User
+  Post Image
   ========================================
 */
 
-func getUser(w http.ResponseWriter, r *http.Request) {
-	log.Println("=== get user ===")
+func postImage(w http.ResponseWriter, r *http.Request) {
+	log.Println("=== post image ===")
 	returnCode := 0
 
-	user := new(User)
-	user.Name = userName
+	fileName := time.Now().Format("20060102150405") + ".jpg"
 
-	if err := getUserDB(user); err != nil {
+	file, _, err := r.FormFile("uploadFile")
+	defer file.Close()
+	if err != nil {
 		returnCode = 1
-		log.Println("get user err 1:", err)
+		log.Println("post image 1:", err)
 	}
 
+	originalImage, _, err := image.Decode(file) // decode file
 	if returnCode == 0 {
-		if err := json.NewEncoder(w).Encode(user); err != nil {
+		if err != nil {
 			returnCode = 2
-			log.Println("get user err 2:", err)
+			log.Println("post image 2:", err)
+		}
+	}
+
+	// Step 4: Resize image to width = 600 px.
+	filePath := "./assets/images/user001/"
+	imageCompressed := imaging.Resize(originalImage, 600, 0, imaging.Linear)
+
+	// Step 5: Save image in directory.
+	imageFile, err := os.Create(filePath + fileName)
+	defer imageFile.Close()
+	if returnCode == 0 {
+		if err != nil {
+			log.Println("post image 5:", err)
+		}
+	}
+
+	// Step 6: Compress image.
+	err = jpeg.Encode(imageFile, imageCompressed, &jpeg.Options{100})
+	if returnCode == 0 {
+		if err != nil {
+			log.Println("process image error 6:", err)
+		}
+	}
+	
+	/*
+	if returnCode == 0 {
+		// Step 8: Save image file name in resume database.
+		err = updateRBackground(resumeID, userID, fileName)
+		if err != nil {
+			log.Println("post image 8:", err)
+		}
+	}
+	*/
+
+	food := "chocolate chip pancakes"
+	
+	if returnCode == 0 {
+		if err := json.NewEncoder(w).Encode(food); err != nil {
+			returnCode = 2
+			log.Println("post image 2:", err)
 		}
 	}
 
 	// error handling
 	if returnCode != 0 {
-		handleError(returnCode, errorStatusCode, "User could not be gotten.", w)
+		handleError(returnCode, errorCode, "Error: view index", w)
 	}
 }
 
@@ -159,7 +206,38 @@ func updateData(w http.ResponseWriter, r *http.Request) {
 
 	// error handling
 	if returnCode != 0 {
-		handleError(returnCode, errorStatusCode, "Data could not be updated.", w)
+		handleError(returnCode, errorCode, "Data could not be updated.", w)
+	}
+}
+
+/*
+  ========================================
+  Get User
+  ========================================
+*/
+
+func getUser(w http.ResponseWriter, r *http.Request) {
+	log.Println("=== get user ===")
+	returnCode := 0
+
+	user := new(User)
+	user.Name = userName
+
+	if err := getUserDB(user); err != nil {
+		returnCode = 1
+		log.Println("get user err 1:", err)
+	}
+
+	if returnCode == 0 {
+		if err := json.NewEncoder(w).Encode(user); err != nil {
+			returnCode = 2
+			log.Println("get user err 2:", err)
+		}
+	}
+
+	// error handling
+	if returnCode != 0 {
+		handleError(returnCode, errorCode, "User could not be gotten.", w)
 	}
 }
 
