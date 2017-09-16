@@ -1,10 +1,6 @@
 package main
 
-import (
-	// "log"
-
-	"gopkg.in/mgo.v2/bson"
-)
+// "log"
 
 type User struct {
 	Name string   `json:"name"`
@@ -22,10 +18,7 @@ type Nutrient struct {
 }
 
 /*
-  ========================================
-  Insert User
-  ========================================
-*/
+// Insert User
 
 func insertUserDB() error {
 	// create new MongoDB session
@@ -40,11 +33,7 @@ func insertUserDB() error {
 	return collection.Insert(user)
 }
 
-/*
-  ========================================
-  Reset Data
-  ========================================
-*/
+// Reset Data
 
 func resetDataDB() error {
 	// create new MongoDB session
@@ -58,11 +47,7 @@ func resetDataDB() error {
 	return collection.Update(selector, update)
 }
 
-/*
-  ========================================
-  Set Goal
-  ========================================
-*/
+// Set Goal
 
 func setGoalDB() error {
 	// create new MongoDB session
@@ -83,44 +68,45 @@ func setGoalDB() error {
 
 	return collection.Update(selector, update)
 }
-
-/*
-  ========================================
-  Get User
-  ========================================
 */
+
+// Get User
 
 func getUserDB(user *User) error {
-	// create new MongoDB session
-	collection, session := initMongoDB("user")
-	defer session.Close()
+	return nil
 
-	selector := bson.M{"name": user.Name}
+	/*
+		// create new MongoDB session
+		collection, session := initMongoDB("user")
+		defer session.Close()
 
-	return collection.Find(selector).One(user)
+		selector := bson.M{"name": user.Name}
+
+		return collection.Find(selector).One(user)
+	*/
 }
 
-/*
-  ========================================
-  Update Data
-  ========================================
-*/
+// Update Data
 
 func updateDataDB(user *User, nutr *Nutrient) error {
-	// create new MongoDB session
-	collection, session := initMongoDB("user")
-	defer session.Close()
+	return nil
 
-	selector := bson.M{"name": user.Name}
-	change := bson.M{
-		"data.calories": nutr.Calories,
-		"data.fat": nutr.Fat,
-		"data.cholesterol": nutr.Cholesterol,
-		"data.sodium": nutr.Sodium,
-		"data.carbohydrates": nutr.Carbohydrates,
-		"data.protein": nutr.Protein,
-	}
-	update := bson.M{"$inc": &change}
+	/*
+		// create new MongoDB session
+		collection, session := initMongoDB("user")
+		defer session.Close()
 
-	return collection.Update(selector, update)
+		selector := bson.M{"name": user.Name}
+		change := bson.M{
+			"data.calories":      nutr.Calories,
+			"data.fat":           nutr.Fat,
+			"data.cholesterol":   nutr.Cholesterol,
+			"data.sodium":        nutr.Sodium,
+			"data.carbohydrates": nutr.Carbohydrates,
+			"data.protein":       nutr.Protein,
+		}
+		update := bson.M{"$inc": &change}
+
+		return collection.Update(selector, update)
+	*/
 }

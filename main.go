@@ -55,7 +55,7 @@ func main() {
 	router.Get("/getUser", getUser)
 	router.Get("/", viewIndex)
 
-	//resetDataDB()
+	getNutrition("pancake")
 
 	log.Println("Listening...")
 	if err := http.ListenAndServe(":4444", router); err != nil {
@@ -145,19 +145,19 @@ func postImage(w http.ResponseWriter, r *http.Request) {
 			log.Println("process image error 6:", err)
 		}
 	}
-	
+
 	/*
-	if returnCode == 0 {
-		// Step 8: Save image file name in resume database.
-		err = updateRBackground(resumeID, userID, fileName)
-		if err != nil {
-			log.Println("post image 8:", err)
+		if returnCode == 0 {
+			// Step 8: Save image file name in resume database.
+			err = updateRBackground(resumeID, userID, fileName)
+			if err != nil {
+				log.Println("post image 8:", err)
+			}
 		}
-	}
 	*/
 
 	food := "chocolate chip pancakes"
-	
+
 	if returnCode == 0 {
 		if err := json.NewEncoder(w).Encode(food); err != nil {
 			returnCode = 2
