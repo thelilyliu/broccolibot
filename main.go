@@ -11,7 +11,6 @@ import (
 	"os"
 	"os/exec"
 	"path"
-	"strconv"
 	"strings"
 	"time"
 
@@ -74,11 +73,10 @@ func main() {
 	})
 
 	calculate("pancakes", 2)
+	// runScraper("pancakes")
 
 	router.Post("/postImage", postImage)
 	router.Post("/calculateNutrition/:foodID/:amount", calculateNutrition)
-	router.Post("/updateUser", updateUser)
-	router.Get("/getUser", getUser)
 	router.Get("/", viewIndex)
 
 	log.Println("Listening...")
@@ -206,7 +204,23 @@ func classifyImage(fileName string) {
 
 /*
   ========================================
-  4. Calculate Nutrition
+  4. Run Scraper
+  ========================================
+*/
+
+func runScraper(arguments string) {
+	cmd := "/scrapper/BroccoliScrapper.exe"
+	args := []string{arguments}
+	if err := exec.Command(cmd, args...).Run(); err != nil {
+		log.Println(os.Stderr, err)
+		os.Exit(1)
+	}
+	log.Println("Scrapper done")
+}
+
+/*
+  ========================================
+  5. Calculate Nutrition
   ========================================
 */
 
@@ -246,32 +260,40 @@ func calculateNutrition(w http.ResponseWriter, r *http.Request) {
 	returnCode := 0
 
 	foodID := vestigo.Param(r, "foodID")
-	amount, err := strconv.Atoi(vestigo.Param(r, "amount"))
+	// amount, err := strconv.Atoi(vestigo.Param(r, "amount"))
 
-	db, err := gorm.Open("postgres", addr)
-	defer db.Close()
+	runScraper(foodID)
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	/*
+		db, err := gorm.Open("postgres", addr)
+		defer db.Close()
 
-	log.Println("=== total amount", amount, "===")
+		if err != nil {
+			log.Fatal(err)
+		}
 
-	foodIngredients := new([]FoodIngredient)
-	nutrient := new(Nutrient)
+		log.Println("=== total amount", amount, "===")
+		// **** Do stuff with total amount ****
 
-	db.Table(
-		"broccolibot.ingredients").Select(
-		`sum(calories * amount) as "calories", sum(fat * amount) AS "fat"`).Joins(
-		"JOIN broccolibot.food_ingredients on id = ingredientid").Where(
-		"foodid = ?", foodID).Find(&nutrient)
-	// SELECT SUM(calories * amount) FROM ingredients JOIN food_ingredients on id = ingredientid WHERE foodid = $foodid
+		nutrient := new(Nutrient)
 
-	log.Println(*foodIngredients)
-	log.Println(*nutrient)
+		db.Table(
+			"broccolibot.ingredients").Select(
+			`sum(calories * amount) AS "calories",
+			 sum(fat * amount) AS "fat",
+			 sum(cholesterol * amount) AS "cholesterol",
+			 sum(sodium * amount) AS "sodium",
+			 sum(carbohydrates * amount) AS "carbohydrates",
+			 sum(protein * amount) AS "protein"`).Joins(
+			"JOIN broccolibot.food_ingredients on id = ingredientid").Where(
+			"foodid = ?", foodID).Find(&nutrient)
+		// SELECT SUM(calories * amount) AS "Calories" FROM ingredients JOIN food_ingredients on id = ingredientid WHERE foodid = $foodid
+
+		log.Println(*nutrient)
+	*/
 
 	if returnCode == 0 {
-		if err := json.NewEncoder(w).Encode(*nutrient); err != nil {
+		if err := json.NewEncoder(w).Encode("nutrient"); err != nil {
 			returnCode = 3
 			log.Println("calculate nutrition 3:", err)
 		}
@@ -280,76 +302,6 @@ func calculateNutrition(w http.ResponseWriter, r *http.Request) {
 	// error handling
 	if returnCode != 0 {
 		handleError(returnCode, errorCode, "Error: calculate nutrition.", w)
-	}
-}
-
-/*
-  ========================================
-  5. Update User
-  ========================================
-*/
-
-func updateUser(w http.ResponseWriter, r *http.Request) {
-	log.Println("=== update user ===")
-	returnCode := 0
-
-	user := new(User)
-	user.Name = userName
-	nutr := new(Nutrient)
-
-	if err := json.NewDecoder(r.Body).Decode(nutr); err != nil {
-		returnCode = 1
-		log.Println("update user 1:", err)
-	}
-
-	if returnCode == 0 {
-		if err := updateDataDB(user, nutr); err != nil {
-			returnCode = 2
-			log.Println("update user 2:", err)
-		}
-	}
-
-	if returnCode == 0 {
-		if err := json.NewEncoder(w).Encode(user); err != nil {
-			returnCode = 3
-			log.Println("update user 3:", err)
-		}
-	}
-
-	// error handling
-	if returnCode != 0 {
-		handleError(returnCode, errorCode, "Error: update user.", w)
-	}
-}
-
-/*
-  ========================================
-  6. Get User
-  ========================================
-*/
-
-func getUser(w http.ResponseWriter, r *http.Request) {
-	log.Println("=== get user ===")
-	returnCode := 0
-
-	user := new(User)
-	user.Name = userName
-
-	if err := getUserDB(user); err != nil {
-		returnCode = 1
-		log.Println("get user err 1:", err)
-	}
-
-	if returnCode == 0 {
-		if err := json.NewEncoder(w).Encode(user); err != nil {
-			returnCode = 2
-			log.Println("get user err 2:", err)
-		}
-	}
-
-	// error handling
-	if returnCode != 0 {
-		handleError(returnCode, errorCode, "User could not be gotten.", w)
 	}
 }
 

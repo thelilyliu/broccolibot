@@ -1,3 +1,5 @@
+{{define "my-template"}}
+
 <!DOCTYPE HTML>
 <!--
 	Overflow by HTML5 UP
@@ -20,7 +22,7 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
-		<link rel="stylesheet" href="../css/main.css" />
+		<link rel="stylesheet" href="/assets/css/main.css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
 
 		<style>
@@ -118,7 +120,7 @@
 		<!-- Feature 1 -->
 		
 			<article id="first" class="container box style1 right">
-				<a href="#" class="image fit"><img src="../img/pic01.jpg" alt="" /></a>
+				<a href="#" class="image fit"><img src="/assets/img/pic01.jpg" alt="" /></a>
 				<div class="inner">
 					<header>
 						<h2>Lorem ipsum<br />
@@ -130,7 +132,7 @@
 
 		<!-- Feature 2 -->
 			<article class="container box style1 left">
-				<a href="#" class="image fit"><img src="../img/pic02.jpg" alt="" /></a>
+				<a href="#" class="image fit"><img src="/assets/img/pic02.jpg" alt="" /></a>
 				<div class="inner">
 					<header>
 						<h2>Mollis posuere<br />
@@ -157,15 +159,9 @@
 			</div>
 		</section>
 
-		<!-- Scripts -->
-			<script src="../js/jquery.min.js"></script>
-			<script src="../js/jquery.scrolly.min.js"></script>
-			<script src="../js/jquery.poptrox.min.js"></script>
-			<script src="../js/skel.min.js"></script>
-			<script src="../js/util.js"></script>
-			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="../js/main.js"></script>
-			<script src="../js/js.js"></script>
+		{{template "scripts" .}}
 
 	</body>
 </html>
+
+{{end}}
