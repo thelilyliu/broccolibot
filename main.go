@@ -29,6 +29,18 @@ type Error struct {
 	Message string `json:"message"`
 }
 
+type ScraperFood struct {
+	Name                  string
+	Ingredients           []ScraperIngredient
+	IngredientsNormalized []ScraperIngredient
+}
+
+type ScraperIngredient struct {
+	Name     string
+	Unit     int
+	Quantity float64
+}
+
 type FoodIngredient struct {
 	Foodid       string
 	Ingredientid int
@@ -218,13 +230,21 @@ func classifyImage(fileName string) {
 */
 
 func runScraper(arguments string) {
-	cmd := "/scrapper/BroccoliScrapper.exe"
-	args := []string{arguments}
-	if err := exec.Command(cmd, args...).Run(); err != nil {
-		log.Println(os.Stderr, err)
-		os.Exit(1)
+	log.Println("== classify image ===")
+
+	var out bytes.Buffer
+	var stderr bytes.Buffer
+
+	cmd := exec.Command("script2.bat")
+	cmd.Stdout = &out
+	cmd.Stderr = &stderr
+
+	if err := cmd.Run(); err != nil {
+		log.Println("classify image 3:", err)
 	}
-	log.Println("Scrapper done")
+
+	// parse JSON
+
 }
 
 /*
