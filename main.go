@@ -35,6 +35,15 @@ type FoodIngredient struct {
 	Amount       float32
 }
 
+type Nutrient struct {
+	Calories      int `json:"calories"`
+	Fat           int `json:"fat"`
+	Cholesterol   int `json:"cholesterol"`
+	Sodium        int `json:"sodium"`
+	Carbohydrates int `json:"carbohydrates"`
+	Protein       int `json:"protein"`
+}
+
 const (
 	errorCode  = 555
 	serverName = "GWS"
