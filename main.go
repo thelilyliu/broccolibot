@@ -73,6 +73,8 @@ func main() {
 		fileServerImages.ServeHTTP(w, r)
 	})
 
+	calculate("pancakes", 2)
+
 	router.Post("/postImage", postImage)
 	router.Post("/calculateNutrition/:foodID/:amount", calculateNutrition)
 	router.Post("/updateUser", updateUser)
@@ -208,8 +210,40 @@ func classifyImage(fileName string) {
   ========================================
 */
 
+func calculate(foodID string, amount float32) {
+	log.Println("=== calculate nutrition ===")
+
+	db, err := gorm.Open("postgres", addr)
+	defer db.Close()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("=== total amount", amount, "===")
+
+	foodIngredients := new([]FoodIngredient)
+	nutrient := new(Nutrient)
+
+	db.Table(
+		"broccolibot.ingredients").Select(
+		`sum(calories * amount) AS "calories",
+		 sum(fat * amount) AS "fat",
+		 sum(cholesterol * amount) AS "cholesterol",
+		 sum(sodium * amount) AS "sodium",
+		 sum(carbohydrates * amount) AS "carbohydrates",
+		 sum(protein * amount) AS "protein"`).Joins(
+		"JOIN broccolibot.food_ingredients on id = ingredientid").Where(
+		"foodid = ?", foodID).Find(&nutrient)
+	// SELECT SUM(calories * amount) AS "Calories" FROM ingredients JOIN food_ingredients on id = ingredientid WHERE foodid = $foodid
+
+	log.Println(*foodIngredients)
+	log.Println(*nutrient)
+}
+
 func calculateNutrition(w http.ResponseWriter, r *http.Request) {
 	log.Println("=== calculate nutrition ===")
+	returnCode := 0
 
 	foodID := vestigo.Param(r, "foodID")
 	amount, err := strconv.Atoi(vestigo.Param(r, "amount"))
@@ -221,13 +255,32 @@ func calculateNutrition(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	log.Println("total serving amount:", amount)
+	log.Println("=== total amount", amount, "===")
 
 	foodIngredients := new([]FoodIngredient)
-	db.Table("ingredients").Select("sum(calories * amount)").Joins("JOIN food_ingredients on id = ingredientid").Where("foodid = ?", foodID).Find(&foodIngredients)
+	nutrient := new(Nutrient)
+
+	db.Table(
+		"broccolibot.ingredients").Select(
+		`sum(calories * amount) as "calories", sum(fat * amount) AS "fat"`).Joins(
+		"JOIN broccolibot.food_ingredients on id = ingredientid").Where(
+		"foodid = ?", foodID).Find(&nutrient)
 	// SELECT SUM(calories * amount) FROM ingredients JOIN food_ingredients on id = ingredientid WHERE foodid = $foodid
 
 	log.Println(*foodIngredients)
+	log.Println(*nutrient)
+
+	if returnCode == 0 {
+		if err := json.NewEncoder(w).Encode(*nutrient); err != nil {
+			returnCode = 3
+			log.Println("calculate nutrition 3:", err)
+		}
+	}
+
+	// error handling
+	if returnCode != 0 {
+		handleError(returnCode, errorCode, "Error: calculate nutrition.", w)
+	}
 }
 
 /*
