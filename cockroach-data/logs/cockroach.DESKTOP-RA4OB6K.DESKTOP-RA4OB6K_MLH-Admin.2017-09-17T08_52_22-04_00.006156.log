@@ -1,0 +1,93 @@
+I170917 08:52:22.760759 1 util/log/clog.go:1013  [config] file created at: 2017/09/17 08:52:22
+I170917 08:52:22.760759 1 util/log/clog.go:1013  [config] running on machine: DESKTOP-RA4OB6K
+I170917 08:52:22.760759 1 util/log/clog.go:1013  [config] binary: CockroachDB OSS v1.0.6 (windows amd64, built 2017/09/14 15:19:52, go1.8.3)
+I170917 08:52:22.760759 1 util/log/clog.go:1013  [config] arguments: [cockroach start --insecure]
+I170917 08:52:22.760759 1 util/log/clog.go:1013  line format: [IWEF]yymmdd hh:mm:ss.uuuuuu goid file:line msg utf8=✓
+W170917 08:52:22.760759 1 cli/start.go:587  RUNNING IN INSECURE MODE!
+
+- Your cluster is open for any client that can access <all your IP addresses>.
+- Any user, even root, can log in without providing a password.
+- Any user, connecting as root, can read or write any data in your cluster.
+- There is no network encryption nor authentication, and thus no confidentiality.
+
+Check out how to secure your cluster: https://www.cockroachlabs.com/docs/secure-a-cluster.html
+I170917 08:52:22.775796 1 cli/start.go:593  CockroachDB OSS v1.0.6 (windows amd64, built 2017/09/14 15:19:52, go1.8.3)
+I170917 08:52:22.880001 1 server/config.go:375  system total memory: 3.9 GiB
+I170917 08:52:22.880001 1 server/config.go:377  server configuration:
+max offset                   500ms
+cache size                   990 MiB
+SQL memory pool size         990 MiB
+scan interval                10m0s
+scan max idle time           200ms
+consistency check interval   24h0m0s
+metrics sample interval      10s
+time until store dead        5m0s
+send next timeout            10m0s
+event log enabled            true
+linearizable                 false
+I170917 08:52:22.881002 51 cli/start.go:340  starting cockroach node
+I170917 08:52:22.911862 51 storage/engine/rocksdb.go:380  opening rocksdb instance at "C:\\Users\\MLH-Admin\\Desktop\\src\\broccolibot-master\\cockroach-data"
+I170917 08:52:22.972182 51 server/config.go:475  [n?] 1 storage engine initialized
+I170917 08:52:22.973185 51 server/config.go:477  [n?] RocksDB cache size: 990 MiB
+I170917 08:52:22.973185 51 server/config.go:477  [n?] store 0: RocksDB, max size 0 B, max open file limit -1
+I170917 08:52:22.977198 51 server/node.go:454  [n?] store [n0,s0] not bootstrapped
+I170917 08:52:23.018603 51 server/node.go:389  [n?] **** cluster 9a73bf7e-298e-4033-8216-acc6912db812 has been created
+I170917 08:52:23.018603 51 server/node.go:390  [n?] **** add additional nodes by specifying --join=DESKTOP-RA4OB6K:26257
+I170917 08:52:23.020615 51 storage/store.go:1253  [n1] [n1,s1]: failed initial metrics computation: [n1,s1]: system config not yet available
+I170917 08:52:23.020615 51 server/node.go:467  [n1] initialized store [n1,s1]: {Capacity:115099037696 Available:52858519552 RangeCount:1 LeaseCount:0}
+I170917 08:52:23.020615 51 server/node.go:351  [n1] node ID 1 initialized
+I170917 08:52:23.020615 51 gossip/gossip.go:297  [n1] NodeDescriptor set to node_id:1 address:<network_field:"tcp" address_field:"DESKTOP-RA4OB6K:26257" > attrs:<> locality:<> 
+I170917 08:52:23.020615 51 storage/stores.go:296  [n1] read 0 node addresses from persistent storage
+I170917 08:52:23.024728 51 server/node.go:608  [n1] connecting to gossip network to verify cluster ID...
+I170917 08:52:23.024728 51 server/node.go:633  [n1] node connected via gossip and verified as part of cluster "9a73bf7e-298e-4033-8216-acc6912db812"
+I170917 08:52:23.024728 51 server/node.go:405  [n1] node=1: started with [[]=C:\Users\MLH-Admin\Desktop\src\broccolibot-master\cockroach-data] engine(s) and attributes []
+I170917 08:52:23.028602 51 sql/executor.go:338  [n1] creating distSQLPlanner with address {tcp DESKTOP-RA4OB6K:26257}
+I170917 08:52:23.030604 102 storage/split_queue.go:93  [split,n1,s1,r1/1:/M{in-ax}] splitting at key /System/""
+I170917 08:52:23.042698 102 storage/replica_command.go:2670  [split,n1,s1,r1/1:/M{in-ax}] initiating a split of this range at key /System/"" [r2]
+I170917 08:52:23.057942 51 server/server.go:735  [n1] starting http server at DESKTOP-RA4OB6K:8080
+I170917 08:52:23.057942 51 server/server.go:736  [n1] starting grpc/postgres server at DESKTOP-RA4OB6K:26257
+I170917 08:52:23.057942 51 server/server.go:737  [n1] advertising CockroachDB node at DESKTOP-RA4OB6K:26257
+E170917 08:52:23.091027 31 storage/replica_proposal.go:497  [n1,s1,r1/1:/M{in-ax}] could not load SystemConfig span: must retry later due to intent on SystemConfigSpan
+I170917 08:52:23.092029 102 storage/split_queue.go:93  [split,n1,s1,r2/1:/{System/-Max}] splitting at key /System/tsd
+I170917 08:52:23.092029 102 storage/replica_command.go:2670  [split,n1,s1,r2/1:/{System/-Max}] initiating a split of this range at key /System/tsd [r3]
+I170917 08:52:23.115760 51 sql/event_log.go:101  [n1] Event: "alter_table", target: 12, info: {TableName:eventlog Statement:ALTER TABLE system.eventlog ALTER COLUMN uniqueid SET DEFAULT uuid_v4() User:node MutationID:0 CascadeDroppedViews:[]}
+I170917 08:52:23.125666 102 storage/split_queue.go:93  [split,n1,s1,r3/1:/{System/tsd-Max}] splitting at key /System/"tse"
+I170917 08:52:23.125666 102 storage/replica_command.go:2670  [split,n1,s1,r3/1:/{System/tsd-Max}] initiating a split of this range at key /System/"tse" [r4]
+I170917 08:52:23.160289 51 sql/lease.go:372  [n1] publish: descID=12 (eventlog) version=2 mtime=2017-09-17 08:52:23.1606307 -0400 EDT
+I170917 08:52:23.177196 102 storage/split_queue.go:93  [split,n1,s1,r4/1:/{System/tse-Max}] splitting at key /Table/0/0
+I170917 08:52:23.177196 102 storage/replica_command.go:2670  [split,n1,s1,r4/1:/{System/tse-Max}] initiating a split of this range at key /Table/0 [r5]
+E170917 08:52:23.220419 121 storage/replica_proposal.go:497  [n1,s1,r4/1:/{System/tse-Max}] could not load SystemConfig span: must retry later due to intent on SystemConfigSpan
+I170917 08:52:23.221421 102 storage/split_queue.go:93  [split,n1,s1,r5/1:/{Table/0-Max}] splitting at key /Table/11/0
+I170917 08:52:23.221421 102 storage/replica_command.go:2670  [split,n1,s1,r5/1:/{Table/0-Max}] initiating a split of this range at key /Table/11 [r6]
+I170917 08:52:23.280396 102 storage/split_queue.go:93  [split,n1,s1,r6/1:/{Table/11-Max}] splitting at key /Table/12/0
+I170917 08:52:23.280396 102 storage/replica_command.go:2670  [split,n1,s1,r6/1:/{Table/11-Max}] initiating a split of this range at key /Table/12 [r7]
+I170917 08:52:23.304321 51 server/server.go:847  [n1] done ensuring all necessary migrations have run
+I170917 08:52:23.304321 51 server/server.go:849  [n1] serving sql connections
+I170917 08:52:23.304321 51 cli/start.go:411  node startup completed:
+CockroachDB node starting at 2017-09-17 08:52:23.3049853 -0400 EDT
+build:      OSS v1.0.6 @ 2017/09/14 15:19:52 (go1.8.3)
+admin:      http://DESKTOP-RA4OB6K:8080
+sql:        postgresql://root@DESKTOP-RA4OB6K:26257?sslmode=disable
+logs:       C:\Users\MLH-Admin\Desktop\src\broccolibot-master\cockroach-data\logs
+store[0]:   path=C:\Users\MLH-Admin\Desktop\src\broccolibot-master\cockroach-data
+status:     initialized new cluster
+clusterID:  9a73bf7e-298e-4033-8216-acc6912db812
+nodeID:     1
+I170917 08:52:23.324335 102 storage/split_queue.go:93  [split,n1,s1,r7/1:/{Table/12-Max}] splitting at key /Table/13/0
+I170917 08:52:23.324335 102 storage/replica_command.go:2670  [split,n1,s1,r7/1:/{Table/12-Max}] initiating a split of this range at key /Table/13 [r8]
+I170917 08:52:23.338414 403 sql/event_log.go:101  [n1] Event: "node_join", target: 1, info: {Descriptor:{NodeID:1 Address:{NetworkField:tcp AddressField:DESKTOP-RA4OB6K:26257} Attrs: Locality:} ClusterID:9a73bf7e-298e-4033-8216-acc6912db812 StartedAt:1505652743025151500 LastUp:1505652743025151500}
+I170917 08:52:23.359425 102 storage/split_queue.go:93  [split,n1,s1,r8/1:/{Table/13-Max}] splitting at key /Table/14/0
+I170917 08:52:23.360428 102 storage/replica_command.go:2670  [split,n1,s1,r8/1:/{Table/13-Max}] initiating a split of this range at key /Table/14 [r9]
+I170917 08:52:23.391144 102 storage/split_queue.go:93  [split,n1,s1,r9/1:/{Table/14-Max}] splitting at key /Table/15/0
+I170917 08:52:23.392144 102 storage/replica_command.go:2670  [split,n1,s1,r9/1:/{Table/14-Max}] initiating a split of this range at key /Table/15 [r10]
+I170917 08:52:33.026125 150 storage/store.go:4034  [n1,s1] sstables (read amplification = 0):
+W170917 08:52:33.026125 152 server/status/runtime.go:184  [n1] unable to get file descriptor usage (will not try again): not implemented on windows
+I170917 08:52:33.030136 152 server/status/runtime.go:225  [n1] runtime stats: 48 MiB RSS, 121 goroutines, 9.6 MiB/3.8 MiB/22 MiB GO alloc/idle/total, 138 KiB/740 KiB CGO alloc/total, 0.00cgo/sec, 0.00/0.00 %(u/s)time, 0.00 %gc (7x)
+I170917 08:52:33.082561 33 storage/replica_proposal.go:415  [n1,s1,r3/1:/System/ts{d-e}] new range lease repl=(n1,s1):1 start=0.000000000,0 epo=1 pro=1505652753.078996000,0 following repl=(n1,s1):1 start=0.000000000,0 exp=1505652752.019664400,0 pro=1505652743.020715200,0
+I170917 08:52:39.263114 1 cli/start.go:446  received signal 'interrupt'
+I170917 08:52:39.275149 1 cli/start.go:471  initiating graceful shutdown of server
+I170917 08:52:39.298203 494 storage/engine/rocksdb.go:447  closing rocksdb instance at "C:\\Users\\MLH-Admin\\Desktop\\src\\broccolibot-master\\cockroach-data"
+I170917 08:52:39.302210 211 vendor/google.golang.org/grpc/transport/http2_server.go:323  transport: http2Server.HandleStreams failed to read frame: read tcp [fe80::f1c8:a34a:8d27:3267%Wi-Fi]:26257->[fe80::f1c8:a34a:8d27:3267%Wi-Fi]:57349: use of closed network connection
+I170917 08:52:39.311237 1 cli/start.go:503  server drained and shutdown completed
+E170917 08:52:39.319256 1 cli/error.go:68  interrupted
+Error: interrupted

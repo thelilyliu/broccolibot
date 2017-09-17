@@ -10,6 +10,8 @@ $(".totop").click(function(e){
     $('html, body').animate({scrollTop:0},'50')
 })
 
+var servingsize=0
+
 $("#uploadImages").click(function() {
     //sendfile
     console.log('1')
@@ -54,7 +56,7 @@ function readURL(input) {
 function uploadImage(input) {
     console.log('2')
     var xhr = new XMLHttpRequest()
-    var url = 'http://10.20.234.253:4444/postImage'
+    var url = '/postImage'
     var fd = new FormData()
     
     fd.append('uploadFile', input.files[0])       
@@ -64,6 +66,8 @@ function uploadImage(input) {
         if (xhr.readyState == 4 && xhr.status == 200) { // file upload success
             if (xhr.responseText != 'fail') { // successful upload
                 console.log('Success')
+                servingsize = $("#food-amount").val()
+                alert(servingsize)
             }
             else { // unsuccessful upload
                 console.log('You suck bigly')
@@ -72,4 +76,52 @@ function uploadImage(input) {
     }
     
     xhr.send(fd)
+}
+
+$("#uploadServing").click(function(e){
+    e.preventDefault()
+    $.ajax({
+        type: 'GET',
+        url: '/assets/response.json',
+        dataType: 'json',
+        cache: false
+    }).done(function(json, textStatus, jqXHr) {
+
+        var _food = json.images[0].classifiers[0].classes[0].class
+        var _food_amount = $("#food-amount").val()
+
+        $("#form-foodserving").hide()
+        $("#food-display").removeClass("hidden")
+
+        calcNutrition(_food, _food_amount)
+
+    }).fail(function(jqXHr, textStatus, errorThrown) {
+    }).always(function() {})
+})
+
+function calcNutrition(foodname, foodamount) {
+    console.log(foodname, foodamount)
+    $.ajax({
+        type: 'POST',
+        url: '/calculateNutrition/' + foodname.toLowerCase() + '/' + foodamount.toLowerCase(),
+        dataType: 'json',
+        cache: false
+    }).done(function(json, textStatus, jqXHr) {
+        console.log(json)
+        $("#table-calories").val(json.Calories)
+        $("#table-fat").val(json.Fat)
+        $("#table-soudium").val(json.Sodium)
+        $("#table-cholesterol").val(json.Cholesterol)
+        $("#table-protein").val(json.Protein)
+        $("#table-carbohydrates").val(json.Carbohydrates)
+
+        $("#table-calories").val(json.calories)
+        $("#table-fat").val(json.fat)
+        $("#table-soudium").val(json.sodium)
+        $("#table-cholesterol").val(jsoncCholesterol)
+        $("#table-protein").val(json.protein)
+        $("#table-carbohydrates").val(json.carbohydrates)
+
+    }).fail(function(jqXHr, textStatus, errorThrown) {
+    }).always(function() {})
 }
