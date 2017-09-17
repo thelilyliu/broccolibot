@@ -1,0 +1,23 @@
+{"Name":"Fluffy Pancakes","Ingredients":[
+	{"Name":"milk","Unit":2,"Quantity":0.75},
+	{"Name":"white vinegar","Unit":0,"Quantity":2.0},
+	{"Name":"all-purpose flour","Unit":2,"Quantity":1.0},
+	{"Name":"white sugar","Unit":0,"Quantity":2.0},
+	{"Name":"baking powder","Unit":1,"Quantity":1.0},
+	{"Name":"baking soda","Unit":1,"Quantity":0.5},
+	{"Name":"salt","Unit":1,"Quantity":0.5},
+	{"Name":"egg","Unit":8,"Quantity":1.0},
+	{"Name":"butter, melted","Unit":0,"Quantity":2.0},
+	{"Name":"cooking spray","Unit":8,"Quantity":1.0}
+],"IngredientsNormalized":[
+	{"Name":"milk","Unit":7,"Quantity":177.441},
+	{"Name":"white vinegar","Unit":7,"Quantity":29.5736},
+	{"Name":"all-purpose flour","Unit":7,"Quantity":236.588},
+	{"Name":"white sugar","Unit":7,"Quantity":29.5736},
+	{"Name":"baking powder","Unit":7,"Quantity":4.92892},
+	{"Name":"baking soda","Unit":7,"Quantity":2.46446},
+	{"Name":"salt","Unit":7,"Quantity":2.46446},
+	{"Name":"egg","Unit":8,"Quantity":0.0},
+	{"Name":"butter, melted","Unit":7,"Quantity":29.5736},
+	{"Name":"cooking spray","Unit":8,"Quantity":0.0}
+]}

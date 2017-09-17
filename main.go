@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"strconv"
 	"strings"
 	"time"
 
@@ -93,7 +94,7 @@ func main() {
 		fileServerImages.ServeHTTP(w, r)
 	})
 
-	calculate("pancakes", 2)
+	// calculate("pancakes", 2)
 	// runScraper("pancakes")
 
 	router.Post("/postImage", postImage)
@@ -230,21 +231,35 @@ func classifyImage(fileName string) {
 */
 
 func runScraper(arguments string) {
-	log.Println("== classify image ===")
+	/*
+		log.Println("== classify image ===")
 
-	var out bytes.Buffer
-	var stderr bytes.Buffer
+		var out bytes.Buffer
+		var stderr bytes.Buffer
 
-	cmd := exec.Command("script2.bat")
-	cmd.Stdout = &out
-	cmd.Stderr = &stderr
+		cmd := exec.Command("script2.bat")
+		cmd.Stdout = &out
+		cmd.Stderr = &stderr
 
-	if err := cmd.Run(); err != nil {
-		log.Println("classify image 3:", err)
-	}
+		if err := cmd.Run(); err != nil {
+			log.Println("run scraper 1:", err)
+		}
+	*/
 
 	// parse JSON
 
+	configFile, err := os.Open("response2.json")
+	if err != nil {
+		log.Println("opening config file", err.Error())
+	}
+
+	scraperFood := new(ScraperFood)
+	jsonParser := json.NewDecoder(configFile)
+	if err = jsonParser.Decode(&scraperFood); err != nil {
+		log.Println("parsing config file", err.Error())
+	}
+
+	log.Println(*scraperFood)
 }
 
 /*
@@ -289,37 +304,36 @@ func calculateNutrition(w http.ResponseWriter, r *http.Request) {
 	returnCode := 0
 
 	foodID := vestigo.Param(r, "foodID")
-	// amount, err := strconv.Atoi(vestigo.Param(r, "amount"))
+	foodID = "pancakes"
+	amount, err := strconv.Atoi(vestigo.Param(r, "amount"))
 
 	runScraper(foodID)
 
-	/*
-		db, err := gorm.Open("postgres", addr)
-		defer db.Close()
+	db, err := gorm.Open("postgres", addr)
+	defer db.Close()
 
-		if err != nil {
-			log.Fatal(err)
-		}
+	if err != nil {
+		log.Fatal(err)
+	}
 
-		log.Println("=== total amount", amount, "===")
-		// **** Do stuff with total amount ****
+	log.Println("=== total amount", amount, "===")
+	// **** Do stuff with total amount ****
 
-		nutrient := new(Nutrient)
+	nutrient := new(Nutrient)
 
-		db.Table(
-			"broccolibot.ingredients").Select(
-			`sum(calories * amount) AS "calories",
-			 sum(fat * amount) AS "fat",
-			 sum(cholesterol * amount) AS "cholesterol",
-			 sum(sodium * amount) AS "sodium",
-			 sum(carbohydrates * amount) AS "carbohydrates",
-			 sum(protein * amount) AS "protein"`).Joins(
-			"JOIN broccolibot.food_ingredients on id = ingredientid").Where(
-			"foodid = ?", foodID).Find(&nutrient)
-		// SELECT SUM(calories * amount) AS "Calories" FROM ingredients JOIN food_ingredients on id = ingredientid WHERE foodid = $foodid
+	db.Table(
+		"broccolibot.ingredients").Select(
+		`sum(calories * amount) AS "calories",
+			sum(fat * amount) AS "fat",
+			sum(cholesterol * amount) AS "cholesterol",
+			sum(sodium * amount) AS "sodium",
+			sum(carbohydrates * amount) AS "carbohydrates",
+			sum(protein * amount) AS "protein"`).Joins(
+		"JOIN broccolibot.food_ingredients on id = ingredientid").Where(
+		"foodid = ?", foodID).Find(&nutrient)
+	// SELECT SUM(calories * amount) AS "Calories" FROM ingredients JOIN food_ingredients on id = ingredientid WHERE foodid = $foodid
 
-		log.Println(*nutrient)
-	*/
+	log.Println(*nutrient)
 
 	if returnCode == 0 {
 		if err := json.NewEncoder(w).Encode("nutrient"); err != nil {
