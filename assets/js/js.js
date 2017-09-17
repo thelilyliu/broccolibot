@@ -54,7 +54,7 @@ function readURL(input) {
 function uploadImage(input) {
     console.log('2')
     var xhr = new XMLHttpRequest()
-    var url = 'http://10.21.38.34:4444/postImage'
+    var url = 'http://10.20.234.253:4444/postImage'
     var fd = new FormData()
     
     fd.append('uploadFile', input.files[0])       

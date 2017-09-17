@@ -40,9 +40,9 @@ const (
 	errorCode  = 555
 	serverName = "GWS"
 	userName   = "User"
-
-	filePath = "./assets/images/"
-	addr     = "postgresql://admin@localhost:26257/broccolibot?sslmode=disable"
+	imageName  = "food.jpg"
+	fileName   = "response.json"
+	addr       = "postgresql://admin@localhost:26257/broccolibot?sslmode=disable"
 )
 
 func main() {
@@ -130,7 +130,7 @@ func postImage(w http.ResponseWriter, r *http.Request) {
 	log.Println("=== post image ===")
 	returnCode := 0
 
-	fileName := time.Now().Format("20060102150405") + ".jpg"
+	// fileName := time.Now().Format("20060102150405") + ".jpg"
 
 	file, _, err := r.FormFile("uploadFile")
 	defer file.Close()
@@ -151,7 +151,7 @@ func postImage(w http.ResponseWriter, r *http.Request) {
 	imageCompressed := imaging.Resize(originalImage, 600, 0, imaging.Linear)
 
 	// Step 5: Save image in directory.
-	imageFile, err := os.Create(filePath + fileName)
+	imageFile, err := os.Create(imageName)
 	defer imageFile.Close()
 	if returnCode == 0 {
 		if err != nil {
@@ -166,7 +166,7 @@ func postImage(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	classifyImage("food.jpg")
+	classifyImage(imageName)
 
 	if returnCode == 0 {
 		if err := json.NewEncoder(w).Encode("post image: true"); err != nil {

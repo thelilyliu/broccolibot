@@ -6,39 +6,55 @@
                 {
                     "classes": [
                         {
-                            "class": "banana",
-                            "score": 0.562,
-                            "type_hierarchy": "/fruit/banana"
+                            "class": "Pancakes",
+                            "score": 0.856,
+                            "type_hierarchy": "/food/nutrition/meal/Pancakes"
                         },
                         {
-                            "class": "fruit",
-                            "score": 0.788
+                            "class": "meal",
+                            "score": 0.856
                         },
                         {
-                            "class": "diet (food)",
-                            "score": 0.528,
-                            "type_hierarchy": "/food/diet (food)"
+                            "class": "nutrition",
+                            "score": 0.898
                         },
                         {
                             "class": "food",
-                            "score": 0.528
+                            "score": 0.95
                         },
                         {
-                            "class": "honeydew",
+                            "class": "drop scone",
+                            "score": 0.677,
+                            "type_hierarchy": "/food/food product/bread/quick bread/drop scone"
+                        },
+                        {
+                            "class": "quick bread",
+                            "score": 0.677
+                        },
+                        {
+                            "class": "bread",
+                            "score": 0.677
+                        },
+                        {
+                            "class": "food product",
+                            "score": 0.677
+                        },
+                        {
+                            "class": "chip",
                             "score": 0.5,
-                            "type_hierarchy": "/fruit/melon/honeydew"
+                            "type_hierarchy": "/food/nutrition/dish/chip"
                         },
                         {
-                            "class": "melon",
-                            "score": 0.501
+                            "class": "dish",
+                            "score": 0.5
                         },
                         {
-                            "class": "olive color",
-                            "score": 0.973
+                            "class": "reddish orange color",
+                            "score": 0.912
                         },
                         {
-                            "class": "lemon yellow color",
-                            "score": 0.789
+                            "class": "pale yellow color",
+                            "score": 0.646
                         }
                     ],
                     "classifier_id": "default",
